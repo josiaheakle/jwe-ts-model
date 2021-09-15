@@ -1,0 +1,19 @@
+{
+  "name": "ts-model",
+  "version": "0.1.0",
+  "description": "An abstract model class to easily develop different models for each usecase. Developed for SQL databases.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Josiah Eakle",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite": "^4.0.23",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13"
+  }
+}
