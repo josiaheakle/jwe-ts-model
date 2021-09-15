@@ -2,9 +2,10 @@
   "name": "jwe-ts-model",
   "version": "0.1.0",
   "description": "An abstract model class to easily develop different models for each usecase. Developed for SQL databases.",
-  "main": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublish": "tsc"
   },
   "author": "Josiah Eakle",
   "license": "ISC",

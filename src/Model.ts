@@ -171,17 +171,19 @@ abstract class Model {
 	}
 
 	/** Returns property by name of property */
-	protected getPropertyByName(name: string): ModelProperty {
+	protected getPropertyByName(name: string): ModelProperty | undefined {
 		return this.properties.find((prop) => prop.name === name);
 	}
 
 	public getErrorResponse(): { [index: string]: Array<string> } {
-		const obj = {};
+		const obj: { [index: string]: any } = {};
 		this.errorMessages.forEach((error) => {
-			if (!obj[error.property]) {
-				obj[error.property] = [error.message];
-			} else {
-				obj[error.property].push(error.message);
+			if (error.property) {
+				if (!obj[error.property]) {
+					obj[error.property] = [error.message];
+				} else {
+					obj[error.property].push(error.message);
+				}
 			}
 		});
 		return obj;
