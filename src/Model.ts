@@ -16,6 +16,7 @@ import { ModelProperty, ModelRuleResponse } from "./types/ModelTypes";
  * 	containsNumber checks if value is string and if it contains a number
  * 	includes checks if value is string and if it contains specified value inside
  *  noSpaces checks if value is string and if it contains no whitespace
+ *  required checks if value is not undefined or an empty string
  */
 
 abstract class Model {
@@ -33,6 +34,19 @@ abstract class Model {
 	protected ruleMethods: {
 		[index: string]: (prop: ModelProperty, param?: any) => Promise<boolean>;
 	} = {
+		required: async (prop: ModelProperty): Promise<boolean> => {
+			if (
+				prop.value === undefined ||
+				(typeof prop.value === "string" && prop.value.length <= 1)
+			) {
+				this.addError({
+					property: prop.name,
+					message: "Required.",
+				});
+				false;
+			}
+			return true;
+		},
 		noSpaces: async (prop: ModelProperty): Promise<boolean> => {
 			if (typeof prop.value !== "string" || prop.value.indexOf(" ") >= 0) {
 				this.addError({
@@ -196,16 +210,16 @@ abstract class Model {
 		for (const prop of this.properties) {
 			if (prop.rules) {
 				for (const rule of prop.rules) {
-					console.log(`Checking ${rule.rule} for ${prop.name}.`);
 					try {
 						const passesRule = await this.ruleMethods[rule.rule](
 							prop,
 							rule.param
 						);
-						console.log({ passesRule });
 						if (!passesRule) isValid = false;
 					} catch (error) {
-						throw new Error(`Rule not found.`);
+						throw new Error(
+							`Rule not found. For property ${prop.name} rule ${rule.rule}.`
+						);
 					}
 				}
 			}
@@ -229,7 +243,6 @@ abstract class Model {
 			this.tableName
 		} (${columnStr}) VALUES (?${`, ?`.repeat(this.properties.length - 1)})`;
 		try {
-			console.log({ SQL });
 			const stmt = await this.dbConn.prepare(SQL);
 			const res = await stmt.run(this.properties.map((prop) => prop.value));
 			await stmt.finalize();
