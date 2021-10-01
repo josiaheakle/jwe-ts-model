@@ -159,7 +159,7 @@ abstract class Model {
 			if (res) {
 				this.addError({
 					property: prop.name,
-					message: `${prop.value} is already in use!`,
+					message: `Already in use.`,
 				});
 				return false;
 			} else return true;
