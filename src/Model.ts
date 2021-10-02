@@ -4,19 +4,22 @@ import * as sqlite from "sqlite";
 import { ModelProperty, ModelRuleResponse } from "./types/ModelTypes";
 
 /**
+ * REQUIRES tableName and properties property, must pass sqlite db connection as arg
+ *
+ *
  * RULES :
- * 	maxLength checks if string length is less than or equal to specified number
- * 	minLength checks if string length is greater than or equal to speicified number
- * 	maxNum checks if number is less than or equal to specified number
- * 	minNum checks if number is greater than or equal to specified number
- * 	matches checks if property value matches specified property
- * 	unique checks db if property value is unique
- *  containsCapital checks if value is string and if it contains a capital letter
- * 	containsSpecChar checks if value is string and if it contains a special character
- * 	containsNumber checks if value is string and if it contains a number
- * 	includes checks if value is string and if it contains specified value inside
- *  noSpaces checks if value is string and if it contains no whitespace
- *  required checks if value is not undefined or an empty string
+ * {maxLength} (param: number) checks if string length is less than or equal to specified number
+ * {minLength} (param: number) checks if string length is greater than or equal to speicified number
+ * {maxNum} (param: number) checks if number is less than or equal to specified number
+ * {minNum} (param: number) checks if number is greater than or equal to specified number
+ * {matches} (param: string of property name) checks if property value matches specified property
+ * {unique} (param: none) checks db if property value is unique
+ * {containsCapital} (param: none) checks if value is string and if it contains a capital letter
+ * {containsSpecChar} (param: none) checks if value is string and if it contains a special character
+ * {containsNumber} (param: none) checks if value is string and if it contains a number
+ * {includes} (param: string) checks if value is string and if it contains specified value inside
+ * {noSpaces} (param: none)  checks if value is string and if it contains no whitespace
+ * {required} (param: none)  checks if value is not undefined or an empty string
  */
 
 abstract class Model {
@@ -237,7 +240,7 @@ abstract class Model {
 	}
 
 	/** Saves data from this.properties into database */
-	public async saveData(): Promise<boolean> {
+	public async saveData(): Promise<number> {
 		const columnStr = this.properties.map((prop) => prop.column).join(`, `);
 		const SQL = `INSERT INTO ${
 			this.tableName
@@ -246,11 +249,10 @@ abstract class Model {
 			const stmt = await this.dbConn.prepare(SQL);
 			const res = await stmt.run(this.properties.map((prop) => prop.value));
 			await stmt.finalize();
-			if (res) return true;
-			else return false;
+			return res.lastID || -1;
 		} catch (error) {
 			console.error(error);
-			return false;
+			return -2;
 		}
 	}
 }
