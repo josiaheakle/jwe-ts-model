@@ -1,129 +1,68 @@
 // Dependencies
-import { Request } from "jest-express/lib/request";
 import * as Express from "express";
-import * as sqlite from "sqlite";
-import * as sqlite3 from "sqlite3";
 
-// Module and Module types
-import { Model } from "../Model";
-import { ModelProperty } from "../types/ModelTypes";
+import { Model } from "..";
 
-const Helpers = (() => {
-	const prop: ModelProperty = {
-		name: "testProp",
-		column: "test_number",
-		rules: [
-			{
-				rule: "maxNum",
-				param: 10,
-			},
-			{ rule: "required" },
-		],
-	};
+// Test Examples
+import {
+	TestModel,
+	numProp,
+	strProp,
+	emailProp,
+	uniqueProp,
+	requiredProp,
+	getRequest,
+	createConnection,
+} from "./TestExamples";
 
-	class TestModel extends Model {
-		tableName = "test";
-		properties = [prop];
-	}
-
-	const createConnection = async (): Promise<sqlite.Database> => {
-		return await sqlite.open({
-			filename: "./test.db",
-			driver: sqlite3.Database,
-		});
-	};
-
-	return {
-		prop,
-		TestModel,
-		createConnection,
-	};
-})();
-
-test("maxNum passes", async () => {
-	const req = new Request();
-	req.setBody({
-		testProp: 1,
+test("{saveData} returns id of saved column", async () => {
+	const req = getRequest({
+		requiredProperty: "value",
+		numberProperty: 12,
+		stringProperty: "string",
+		emailProperty: "test@email.com",
+		uniqueProp: Math.floor(Math.random() * 1000000),
 	});
-
-	const conn = await Helpers.createConnection();
-	const model = new Helpers.TestModel(conn);
-	model.loadBody(req as unknown as Express.Request);
-	await conn.close();
-
-	expect(await model.checkRules()).toBe(true);
-});
-
-test("maxNum passes on last number", async () => {
-	const req = new Request();
-	req.setBody({
-		testProp: 10,
-	});
-
-	const conn = await Helpers.createConnection();
-	const model = new Helpers.TestModel(conn);
-	model.loadBody(req as unknown as Express.Request);
-	await conn.close();
-
-	expect(await model.checkRules()).toBe(true);
-});
-
-test("maxNum fails too high", async () => {
-	const req = new Request();
-	req.setBody({
-		testProp: 11,
-	});
-
-	const conn = await Helpers.createConnection();
-	const model = new Helpers.TestModel(conn);
-	model.loadBody(req as unknown as Express.Request);
-	await conn.close();
-
-	expect(await model.checkRules()).toBe(false);
-});
-
-test("maxNum fails not a number", async () => {
-	const req = new Request();
-	req.setBody({
-		testProp: "string",
-	});
-
-	const conn = await Helpers.createConnection();
-	const model = new Helpers.TestModel(conn);
-	model.loadBody(req as unknown as Express.Request);
-	await conn.close();
-
-	expect(await model.checkRules()).toBe(false);
-});
-
-test("save data returns id of created entry", async () => {
-	const req = new Request();
-
-	req.setBody({
-		testProp: 1,
-	});
-
-	const conn = await Helpers.createConnection();
-
-	const model = new Helpers.TestModel(conn);
-	model.loadBody(req as unknown as Express.Request);
-
-	expect(await model.saveData()).toBeGreaterThanOrEqual(0);
+	const conn = await createConnection();
+	const model = new TestModel(conn);
+	model.loadBody(req);
+	const saveData = await model.saveData();
+	expect(saveData).toBeGreaterThanOrEqual(0);
 	await conn.close();
 });
 
-test("check rules is false if missing property", async () => {
-	const req = new Request();
-
-	req.setBody({
-		missingProp: "asdf",
+test("{saveData} id gets incremented", async () => {
+	const req1 = getRequest({
+		requiredProperty: "value",
+		numberProperty: 12,
+		stringProperty: "string",
+		emailProperty: "test@email.com",
+		uniqueProp: Math.floor(Math.random() * 1000000),
 	});
-
-	const conn = await Helpers.createConnection();
-
-	const model = new Helpers.TestModel(conn);
-	model.loadBody(req as unknown as Express.Request);
-
-	expect(await model.checkRules()).toBe(false);
+	const req2 = getRequest({
+		requiredProperty: "value",
+		numberProperty: 12,
+		stringProperty: "string",
+		emailProperty: "test@email.com",
+		uniqueProp: Math.floor(Math.random() * 1000000),
+	});
+	const req3 = getRequest({
+		requiredProperty: "value",
+		numberProperty: 12,
+		stringProperty: "string",
+		emailProperty: "test@email.com",
+		uniqueProp: Math.floor(Math.random() * 1000000),
+	});
+	const conn = await createConnection();
+	const model = new TestModel(conn);
+	model.loadBody(req1);
+	const saveData1 = await model.saveData();
+	model.loadBody(req2);
+	const saveData2 = await model.saveData();
+	model.loadBody(req3);
+	const saveData3 = await model.saveData();
+	expect(saveData1 === saveData2 - 1 && saveData2 === saveData3 - 1).toBe(true);
 	await conn.close();
 });
+
+// test("{saveData} saves data", async () => {});

@@ -220,6 +220,7 @@ abstract class Model {
 						);
 						if (!passesRule) isValid = false;
 					} catch (error) {
+						console.error(error);
 						throw new Error(
 							`Rule not found. For property ${prop.name} rule ${rule.rule}.`
 						);
