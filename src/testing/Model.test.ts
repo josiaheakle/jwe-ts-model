@@ -1,11 +1,12 @@
+// Dependencies
 import { Request } from "jest-express/lib/request";
-
 import * as Express from "express";
 import * as sqlite from "sqlite";
 import * as sqlite3 from "sqlite3";
 
+// Module and Module types
 import { Model } from "../Model";
-import { ModelRule, ModelProperty } from "../types/ModelTypes";
+import { ModelProperty } from "../types/ModelTypes";
 
 const Helpers = (() => {
 	const prop: ModelProperty = {
