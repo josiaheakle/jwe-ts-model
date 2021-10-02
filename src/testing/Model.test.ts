@@ -11,10 +11,13 @@ import {
 	emailProp,
 	uniqueProp,
 	requiredProp,
+} from "./examples/TestExamples";
+
+import {
 	createRequest,
 	createConnection,
-	generateUUID,
-} from "./TestExamples";
+	genUUID,
+} from "./methods/TestMethods";
 
 test("{saveData} returns id of saved column", async () => {
 	const req = createRequest({
@@ -22,7 +25,7 @@ test("{saveData} returns id of saved column", async () => {
 		numberProperty: 12,
 		stringProperty: "string",
 		emailProperty: "test@email.com",
-		uniqueProperty: generateUUID(10),
+		uniqueProperty: genUUID(10),
 	});
 	const conn = await createConnection();
 	const model = new TestModel(conn);
@@ -38,21 +41,21 @@ test("{saveData} id gets incremented", async () => {
 		numberProperty: 12,
 		stringProperty: "string",
 		emailProperty: "test@email.com",
-		uniqueProperty: generateUUID(10),
+		uniqueProperty: genUUID(10),
 	});
 	const req2 = createRequest({
 		requiredProperty: "value",
 		numberProperty: 12,
 		stringProperty: "string",
 		emailProperty: "test@email.com",
-		uniqueProperty: generateUUID(10),
+		uniqueProperty: genUUID(10),
 	});
 	const req3 = createRequest({
 		requiredProperty: "value",
 		numberProperty: 12,
 		stringProperty: "string",
 		emailProperty: "test@email.com",
-		uniqueProperty: generateUUID(10),
+		uniqueProperty: genUUID(10),
 	});
 	const conn = await createConnection();
 	const model = new TestModel(conn);
@@ -68,7 +71,7 @@ test("{saveData} id gets incremented", async () => {
 
 test("{saveData && getColumnById} id matches data returned by getColumnById", async () => {
 	const str = `value`;
-	const unique1 = generateUUID(10);
+	const unique1 = genUUID(10);
 	const req1 = createRequest({
 		requiredProperty: `${str}1`,
 		numberProperty: 1,

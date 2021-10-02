@@ -1,17 +1,10 @@
-// Test Examples
 import {
-	TestModel,
-	numProp,
-	strProp,
-	emailProp,
-	uniqueProp,
-	requiredProp,
 	createRequest,
 	createConnection,
-	generateUUID,
-} from "./TestExamples";
+	genUUID,
+} from "./methods/TestMethods";
 
-test(`{generateUUID} properly generates unique value`, () => {
-	const uuid = generateUUID(5);
+test(`{genUUID} properly generates unique value`, () => {
+	const uuid = genUUID(5);
 	expect(uuid.length).toBe(5);
 });

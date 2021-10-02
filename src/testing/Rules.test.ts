@@ -10,9 +10,9 @@ import {
 	emailProp,
 	uniqueProp,
 	requiredProp,
-	createRequest,
-	createConnection,
-} from "./TestExamples";
+} from "./examples/TestExamples";
+
+import { createRequest, createConnection } from "./methods/TestMethods";
 
 test("All rules pass 01.", async () => {
 	const req = createRequest({
