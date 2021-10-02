@@ -10,17 +10,17 @@ import {
 	emailProp,
 	uniqueProp,
 	requiredProp,
-	getRequest,
+	createRequest,
 	createConnection,
 } from "./TestExamples";
 
 test("All rules pass 01.", async () => {
-	const req = getRequest({
+	const req = createRequest({
 		requiredProperty: "value",
 		numberProperty: 12,
 		stringProperty: "string",
 		emailProperty: "test@email.com",
-		uniqueProp: Math.floor(Math.random() * 1000000),
+		uniqueProperty: Math.floor(Math.random() * 1000000),
 	});
 	const conn = await createConnection();
 	const model = new TestModel(conn);
@@ -30,12 +30,12 @@ test("All rules pass 01.", async () => {
 });
 
 test("All rules pass 02.", async () => {
-	const req = getRequest({
+	const req = createRequest({
 		requiredProperty: "value",
 		numberProperty: -12,
 		stringProperty: "string",
 		emailProperty: "test@email.com",
-		uniqueProp: Math.floor(Math.random() * 1000000),
+		uniqueProperty: Math.floor(Math.random() * 1000000),
 	});
 	const conn = await createConnection();
 	const model = new TestModel(conn);
@@ -45,12 +45,12 @@ test("All rules pass 02.", async () => {
 });
 
 test("Rule {maxNum} fails 01.", async () => {
-	const req = getRequest({
+	const req = createRequest({
 		requiredProperty: "value",
 		numberProperty: -22,
 		stringProperty: "string",
 		emailProperty: "test@email.com",
-		uniqueProp: Math.floor(Math.random() * 1000000),
+		uniqueProperty: Math.floor(Math.random() * 1000000),
 	});
 	const conn = await createConnection();
 	const model = new TestModel(conn);
@@ -60,12 +60,12 @@ test("Rule {maxNum} fails 01.", async () => {
 });
 
 test("Rule {maxNum} fails 02.", async () => {
-	const req = getRequest({
+	const req = createRequest({
 		requiredProperty: "value",
 		numberProperty: 22,
 		stringProperty: "string",
 		emailProperty: "test@email.com",
-		uniqueProp: Math.floor(Math.random() * 1000000),
+		uniqueProperty: Math.floor(Math.random() * 1000000),
 	});
 	const conn = await createConnection();
 	const model = new TestModel(conn);

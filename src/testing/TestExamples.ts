@@ -54,6 +54,7 @@ const emailProp: ModelProperty = {
 const uniqueProp: ModelProperty = {
 	name: "uniqueProperty",
 	column: "unique_column",
+
 	rules: [
 		{
 			rule: "unique",
@@ -63,7 +64,7 @@ const uniqueProp: ModelProperty = {
 
 const requiredProp: ModelProperty = {
 	name: "requiredProperty",
-	column: "unique_column",
+	column: "required_column",
 	rules: [
 		{
 			rule: "required",
@@ -71,7 +72,7 @@ const requiredProp: ModelProperty = {
 	],
 };
 
-const getRequest = (
+const createRequest = (
 	body: {},
 	url?: string | null | undefined
 ): Express.Request => {
@@ -88,9 +89,19 @@ const createConnection = async (): Promise<sqlite.Database> => {
 	});
 };
 
+const generateUUID = (length: number): string => {
+	const validChars = `abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ`;
+	let uuid = ``;
+	for (let i = 0; i < length; i++) {
+		uuid += validChars.charAt(Math.floor(Math.random() * validChars.length));
+	}
+	return uuid;
+};
+
 export {
-	getRequest,
+	createRequest,
 	createConnection,
+	generateUUID,
 	TestModel,
 	numProp,
 	strProp,

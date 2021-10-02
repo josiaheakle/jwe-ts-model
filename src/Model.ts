@@ -256,6 +256,13 @@ abstract class Model {
 			return -2;
 		}
 	}
+
+	public async getColumnById(id: number, columns?: Array<string>): Promise<{}> {
+		const columnStr = columns ? columns.join(", ") : "* ";
+		const SQL = `SELECT ${columnStr} FROM ${this.tableName} WHERE id=?`;
+		const res = await this.dbConn.get(SQL, id);
+		return res;
+	}
 }
 
 export { Model };
