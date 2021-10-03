@@ -69,7 +69,7 @@ test("{saveData} id gets incremented", async () => {
 	await conn.close();
 });
 
-test("{saveData && getColumnById} id matches data returned by getColumnById", async () => {
+test("{saveData && getRowById} id matches data returned by getColumnById", async () => {
 	const str = `value`;
 	const unique1 = genUUID(10);
 	const req1 = createRequest({
@@ -83,7 +83,7 @@ test("{saveData && getColumnById} id matches data returned by getColumnById", as
 	const model = new TestModel(conn);
 	model.loadBody(req1);
 	const saveId1 = await model.saveData();
-	const saveData1 = await model.getColumnById(saveId1);
+	const saveData1 = await model.getRowById(saveId1);
 	expect(saveData1).toMatchObject({
 		id: saveId1,
 		required_column: `${str}1`,

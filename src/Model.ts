@@ -257,7 +257,8 @@ abstract class Model {
 		}
 	}
 
-	public async getColumnById(id: number, columns?: Array<string>): Promise<{}> {
+	/** Gets column with specified arrays  */
+	public async getRowById(id: number, columns?: Array<string>): Promise<{}> {
 		const columnStr = columns ? columns.join(", ") : "* ";
 		const SQL = `SELECT ${columnStr} FROM ${this.tableName} WHERE id=?`;
 		const res = await this.dbConn.get(SQL, id);
