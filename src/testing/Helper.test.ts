@@ -4,7 +4,7 @@ import {
 	genUUID,
 } from "./methods/TestMethods";
 
-test(`{genUUID} properly generates unique value`, () => {
+test(`{genUUID} properly generates random value`, () => {
 	const uuid = genUUID(5);
 	expect(uuid.length).toBe(5);
 });
