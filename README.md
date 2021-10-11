@@ -19,7 +19,8 @@ class ExampleModel extends Model {
 			column: "first_name",
 			rules: [
 				{
-                    rule: 'required'
+				    rule: 'required',
+				    message: 'Add a custom message here.'
 				},
 			],
 		},
@@ -29,6 +30,7 @@ class ExampleModel extends Model {
 			rules: [
 				{
 					rule: "required",
+					message: 'Add a custom message here.'
 				},
 			],
 		},
@@ -96,5 +98,4 @@ class ExampleModel extends Model {
 
 ## In Progress
 
-- Custom messages for broken rules.
 - Functionality for multiple database connections and types.
